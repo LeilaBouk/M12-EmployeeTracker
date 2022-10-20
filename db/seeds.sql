@@ -6,7 +6,7 @@ VALUES ("Accounting"),
         ("Editorial"),
         ("IT");
 
-INSERT INTO role(title, salary, dept_id)
+INSERT INTO roles(title, salary, dept_id)
 VALUES ("Writer", "20", 6),
         ("Illustrator", "20", 5),
         ("Graphic Designer", "20", 4),

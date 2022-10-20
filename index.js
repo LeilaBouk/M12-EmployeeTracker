@@ -1,5 +1,25 @@
 // Include packages needed for this application
 const inquirer = require('inquirer');
+const mysql = require('mysql2');
+const cTable = require('console.table');
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+var db = mysql.createConnection({
+    host:process.env.HOST,
+    user:process.env.DB_USER,
+    password:process.env.DB_PASSWORD,
+    database:process.env.DB_NAME
+})
+
+db.connect(function(err){
+    if(err){
+        throw err;
+    } else {
+        start()
+    }
+})
 
 const select = () => {
 
@@ -8,7 +28,7 @@ const select = () => {
             type: 'list',
             message: 'Please select an option',
             name: 'select',
-            choices: ['View all departments', 'View all roles', 'View all employees', 'add department', 'add role', 'add employee', 'update employee role']
+            choices: ['View all departments', 'View all roles', 'View all employees', 'add department', 'add role', 'add employee', 'update employee role', 'Done']
         },
     ])
 
@@ -17,36 +37,71 @@ const select = () => {
     switch (answer.select) {
         case 'View all departments':
             console.log("View all departments!!")
+            viewDepts();
             break;
         
         case 'View all roles':
             console.log("View all roles!!")
+            viewRoles();
             break;
 
         case 'View all employees':
             console.log("View all employees!!")
+            viewEmps();
             break;
 
         case 'add department':
             console.log("add department!!")
+            addDept()
             break;
 
         case 'add role':
             console.log("add role!!")
+            addRole();
             break;
 
         case 'add employee':
             console.log("add employee!!")
+            addEmp();
             break;
 
         case 'update employee role':
             console.log("update employee role!!")
+            updateEmp();
+            break;
+
+         case 'Done':
+            console.log("Exiting...")
             break;
     }
     
 })
 
 };
+
+const viewDepts = () => {
+    db.query('SELECT * FROM department', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        select();
+    })
+}
+
+const viewRoles = () => {
+    db.query('SELECT * FROM roles', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        select();
+    })
+}
+
+const viewEmps = () => {
+    db.query('SELECT * FROM employee', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        select();
+    })
+}
 
 
 const addDept = () => {
@@ -164,8 +219,7 @@ const addEmp = () => {
 };
 
 
-function init() {
+function start() {
     select()
 }
 
-init()
