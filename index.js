@@ -121,7 +121,13 @@ const addDept = () => {
                 }
             }
         },
-    ])
+    ]) .then(answers => {
+        db.query("INSERT INTO department(name) VALUES (?)", answers.depName, (err, results) => {
+            if (err) throw err;
+            console.log("added " + answers.depName);
+            select();
+        })
+    })
 };
 
 const addRole = () => {
